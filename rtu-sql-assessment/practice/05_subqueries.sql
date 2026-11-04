@@ -1,3 +1,41 @@
+
+USE rtu_assignment;
+
+-- Q1. Display sensor details located in CHENNAI
+
+SELECT *
+FROM sensors
+WHERE rtu_id = (
+    SELECT rtu_id
+    FROM rtu
+    WHERE location = 'chennai'
+);
+
+
+-- Q2. Display user details controlling sensors in MUMBAI
+
+SELECT *
+FROM users
+WHERE user_id IN (
+    SELECT user_id
+    FROM controller
+    WHERE sensor_id IN (
+        SELECT sensor_id
+        FROM sensors
+        WHERE rtu_id IN (
+            SELECT rtu_id
+            FROM rtu
+            WHERE location = 'mumbai'
+        )
+    )
+);
+
+
+-- Q3. Display sensor details controlled by SMITHA
+
+SELECT *
+FROM sensors
+WHERE sensor_id IN (
     SELECT sensor_id
     FROM controller
     WHERE user_id IN (
@@ -7,7 +45,10 @@
     )
 );
 
--- Q4. Display user details controlling sensors between S803 and S808
+
+-- Q4. Display user details controlling sensors
+-- with IDs between S803 and S808
+
 SELECT *
 FROM users
 WHERE user_id IN (
@@ -16,8 +57,10 @@ WHERE user_id IN (
     WHERE sensor_id BETWEEN 'S803' AND 'S808'
 );
 
--- Q5. Display user details controlling the most sensors
--- Includes ties when two or more users control the same maximum count.
+
+-- Q5. Display user details controlling
+-- the maximum number of sensors
+
 SELECT *
 FROM users
 WHERE user_id IN (
@@ -34,8 +77,10 @@ WHERE user_id IN (
     )
 );
 
--- Q6. Display RTU details for the RTU(s) having the most sensors
--- Includes ties when two or more RTUs have the same maximum count.
+
+-- Q6. Display RTU details having
+-- the maximum number of sensors
+
 SELECT *
 FROM rtu
 WHERE rtu_id IN (
